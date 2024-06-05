@@ -25,5 +25,19 @@ describe('POST /products', function () {
     expect(response.status).to.equal(201);
     expect(response.body).to.be.deep.equal({...inputProduct, id: 9 });
 });
+it('Testa se ao não fornecer o campo "name" retorna uma menssagem de erro', async function () {
+  const response = await chai.request(app).post('/products').send({ prince: '10 lingotes de prata'})
 
+  expect(response.status).to.be.equal(400);
+})
+it('Testa se ao não fornecer o campo "name" muito curto retorna uma menssagem de erro', async function () {
+  const response = await chai.request(app).post('/products').send({ prince: '10 lingotes de prata', name: 'a'})
+
+  expect(response.status).to.be.equal(422);
+})
+it('Testa se ao não fornecer o campo "name" diferente de uma string retorna uma menssagem de erro', async function () {
+  const response = await chai.request(app).post('/products').send({ prince: '10 lingotes de prata', name: 10 })
+
+  expect(response.status).to.be.equal(422);
+})
 });
